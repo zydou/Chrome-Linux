@@ -55,7 +55,7 @@ jobs:
           bash build.sh
           cp "google-chrome-${CHANNEL}-${VERSION}-x86_64.tar.xz" "google-chrome-${CHANNEL}-x86_64.tar.xz"
           cp "google-chrome-${CHANNEL}-${VERSION}-x86_64.AppImage" "google-chrome-${CHANNEL}-x86_64.AppImage"
-          shasum -a 1 ./google-chrome-* > SHA1SUMS
+          shasum -a 1 google-chrome-* > SHA1SUMS
 
       - name: create release note
         if: env.trigger == 'true'
@@ -75,6 +75,7 @@ jobs:
           CHANNEL: ${{ matrix.channel }}
         run: |
           gh release delete "${CHANNEL}" --cleanup-tag --yes --repo "${{github.repository}}" || true
+          sleep 2 # wait for the tag to be deleted
           gh release create "${CHANNEL}" --prerelease --notes-file note.md --title "${CHANNEL} ${VERSION}" --repo "${{github.repository}}"
           gh release upload "${CHANNEL}" ./google-chrome-* --clobber --repo "${{github.repository}}"
           gh release upload "${CHANNEL}" ./SHA1SUMS --clobber --repo "${{github.repository}}"
@@ -87,6 +88,7 @@ jobs:
           CHANNEL: ${{ matrix.channel }}
         run: |
           gh release delete "${CHANNEL}" --cleanup-tag --yes --repo "${{github.repository}}" || true
+          sleep 2 # wait for the tag to be deleted
           gh release create "${CHANNEL}" --notes-file note.md --title "${CHANNEL} ${VERSION}" --repo "${{github.repository}}"
           gh release upload "${CHANNEL}" ./google-chrome-* --clobber --repo "${{github.repository}}"
           gh release upload "${CHANNEL}" ./SHA1SUMS --clobber --repo "${{github.repository}}"
