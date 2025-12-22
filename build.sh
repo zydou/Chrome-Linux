@@ -17,6 +17,7 @@ mkdir $APP.AppDir
 mv ./opt/google/chrome*/* ./$APP.AppDir/
 mv ./usr/share/applications/*.desktop ./$APP.AppDir/
 sed -i "s#/usr/bin/google-chrome#google-chrome#g" ./$APP.AppDir/*.desktop
+sed -i "s#NoDisplay=true#X-NoDisplay=true#g" ./$APP.AppDir/*.desktop
 
 if [ "$VARIANT" = "stable" ]; then
     cp ./$APP.AppDir/*logo_128*.png ./$APP.AppDir/$APP.png
